@@ -28,25 +28,24 @@ module Scorm
     def self.from_xml(element)
       metadata = nil
       files = []
+      xml_base = element.attribute('xml:base').to_s
+      unless xml_base.end_with?('/')
+        xml_base += '/'
+      end
+
       REXML::XPath.each(element, 'file') do |file_el|
-        files << element.attribute('xml:base').to_s + file_el.attribute('href').to_s
+        files << xml_base + file_el.attribute('href').to_s
       end
       dependencies = []
       REXML::XPath.each(element, 'dependency') do |dep_el|
         dependencies << dep_el.attribute('identifierref').to_s
       end
 
-      path = element.attribute('xml:base').to_s
-      unless path.end_with?('/')
-        path += '/'
-      end
-      path += element.attribute('href').to_s
-
       res = self.new(
         element.attribute('identifier'), 
         element.attribute('type'), 
         element.attribute('scormType', 'adlcp') || element.attribute('scormtype', 'adlcp'),
-        path,
+        xml_base + element.attribute('href').to_s,
         metadata,
         files,
         dependencies)
