@@ -35,12 +35,18 @@ module Scorm
       REXML::XPath.each(element, 'dependency') do |dep_el|
         dependencies << dep_el.attribute('identifierref').to_s
       end
-    
+
+      path = element.attribute('xml:base').to_s
+      unless path.end_with?('/')
+        path += '/'
+      end
+      path += element.attribute('href').to_s
+
       res = self.new(
         element.attribute('identifier'), 
         element.attribute('type'), 
         element.attribute('scormType', 'adlcp') || element.attribute('scormtype', 'adlcp'),
-        element.attribute('xml:base').to_s + element.attribute('href').to_s,
+        path,
         metadata,
         files,
         dependencies)
