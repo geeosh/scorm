@@ -29,17 +29,21 @@ module Scorm
       metadata = nil
       files = []
       xml_base = element.attribute('xml:base').to_s
-      unless xml_base.end_with?('/')
-        xml_base += '/'
-      end
 
       REXML::XPath.each(element, 'file') do |file_el|
-        files << xml_base + file_el.attribute('href').to_s
+        file = file_el.attribute('href').to_s
+        if xml_base.end_with?('/') || file.start_with?('/')
+          files << xml_base + file
+        else
+          files << xml_base + '/' + file
+        end
       end
       dependencies = []
       REXML::XPath.each(element, 'dependency') do |dep_el|
         dependencies << dep_el.attribute('identifierref').to_s
       end
+
+
 
       res = self.new(
         element.attribute('identifier'), 
