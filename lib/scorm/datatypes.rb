@@ -61,10 +61,10 @@ module Scorm
         sec = (sec*100).round/100.0
 
         rtn_str = "PT"
-        if hours
+        if hours > 0
           rtn_str += "#{hours}H"
         end
-        if min
+        if min > 0
           rtn_str += "#{min}M"
         end
         rtn_str += "#{sec}S"
