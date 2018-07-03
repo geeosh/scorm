@@ -59,7 +59,15 @@ module Scorm
         min = (sec/60).to_i
         sec -= min*60
         sec = (sec*100).round/100.0
-        return "PT#{hours}H#{min}M#{sec}S"
+
+        rtn_str = "PT"
+        if hours
+          rtn_str += "#{hours}H"
+        end
+        if min
+          rtn_str += "#{min}M"
+        end
+        rtn_str += "#{sec}S"
       end
     end
     
