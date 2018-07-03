@@ -58,6 +58,7 @@ module Scorm
         sec -= hours*60*60
         min = (sec/60).to_i
         sec -= min*60
+        sec = (sec*100).ceil/100.0
         return "PT#{hours}H#{min}M#{sec}S"
       end
     end
