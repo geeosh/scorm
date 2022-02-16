@@ -103,7 +103,7 @@ module Scorm
     
     # Closes the package.
     def close
-      @zipfile.close if @zipfile
+      @file.close if @file
       
       # Make sure the extracted package is deleted if force_cleanup_on_close
       # is enabled.
@@ -131,7 +131,7 @@ module Scorm
       # Create the path to the course
       FileUtils.mkdir_p(@path)
       
-      Zip::ZipFile::foreach(@package) do |entry|
+      Zip::File::foreach(@package) do |entry|
         entry_path = File.join(@path, entry.name)
         entry_dir = File.dirname(entry_path)
         FileUtils.mkdir_p(entry_dir) unless File.exists?(entry_dir)
@@ -155,7 +155,7 @@ module Scorm
       if File.exists?(@path)
         File.read(path_to(filename))
       else
-        Zip::ZipFile.foreach(@package) do |entry|
+        Zip::File.foreach(@package) do |entry|
           return entry.get_input_stream {|io| io.read } if entry.name == filename
         end
       end
@@ -166,7 +166,7 @@ module Scorm
       if File.exists?(@path)
         File.exists?(path_to(filename))
       else
-        Zip::ZipFile::foreach(@package) do |entry|
+        Zip::File::foreach(@package) do |entry|
           return true if entry.name == filename
         end
         false
@@ -198,7 +198,7 @@ module Scorm
           File.directory?(f) }.map {|f| f.sub(/^#{File.expand_path(@package)}\/?/, '') }
       else
         entries = []
-        Zip::ZipFile::foreach(@package) do |entry|
+        Zip::File::foreach(@package) do |entry|
           entries << entry.name unless entry.name[-1..-1] == '/'
         end
         entries
