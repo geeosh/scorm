@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'zip/zip'
+require 'zip'
 require 'fileutils'
 require 'open-uri'
 require 'scorm/datatypes'
